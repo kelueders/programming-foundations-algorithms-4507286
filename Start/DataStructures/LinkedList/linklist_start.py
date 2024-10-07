@@ -33,17 +33,35 @@ class LinkedList(object):
     def insert(self, data):
         # TODO: insert a new node
         new_node = Node(data)
+        new_node.set_next(self.head)
+        self.head = new_node
+        self.count += 1
 
     def find(self, val):
         # TODO: find the first item with a given value
         item = self.head
+        while (item is not None):
+            if item.get_data() == val:
+                return item
+            else:
+                item = item.get_next()
 
         return None
 
     def deleteAt(self, idx):
         # TODO: delete an item at given index
-        if idx > self.count-1:
+        if idx > self.count-1:  # check to make sure that the index is within the number of existing nodes within the list
             return
+        if idx == 0:
+            self.head = self.head.get_next()  # the head of the list becomes whatever the head is currently pointing at
+        else:  # otherwise we have to advance to the node that is just before the one that we want to delete because, after the deletion, that's going to now point to the node after the one that we want to get rid of
+            tempIdx = 0
+            node = self.head
+            while  tempIdx < idx - 1: # we want to stop right before the index
+                node = node.get_next()
+                tempIdx += 1
+            node.set_next(node.get_next().get_next()) # advancing the point to the one after the one we want to delete
+            self.count -= 1
 
     def dump_list(self):
         tempnode = self.head
@@ -61,13 +79,13 @@ itemlist.insert(15)
 itemlist.dump_list()
 
 # exercise the list
-print("Item count: ", itemlist.get_count())
-print("Finding item: ", itemlist.find(13))
-print("Finding item: ", itemlist.find(78))
+# print("Item count: ", itemlist.get_count())
+# print("Finding item: ", itemlist.find(13))
+# print("Finding item: ", itemlist.find(78))
 
 # delete an item
-# print("Item count: ", itemlist.get_count())
-# itemlist.deleteAt(3)
-# print("Item count: ", itemlist.get_count())
-# print("Finding item: ", itemlist.find(38))
-# itemlist.dump_list()
+print("Item count: ", itemlist.get_count())
+itemlist.deleteAt(3)
+print("Item count: ", itemlist.get_count())
+print("Finding item: ", itemlist.find(38))
+itemlist.dump_list()
